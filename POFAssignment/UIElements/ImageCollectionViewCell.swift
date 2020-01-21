@@ -11,7 +11,7 @@ import UIKit
 class ImageCollectionViewCell: UICollectionViewCell {
     lazy var imageView: UIImageView = {
         var imageView = UIImageView(frame: .zero)
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -57,12 +57,5 @@ class ImageCollectionViewCell: UICollectionViewCell {
         self.contentView.layer.borderWidth = 5.0
         self.contentView.layer.borderColor = UIColor.white.cgColor
         self.contentView.layer.masksToBounds = true
-        
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOffset = CGSize(width: 0, height: 0)
-        self.layer.shadowRadius = 5.0
-        self.layer.shadowOpacity = 1
-        self.layer.masksToBounds = false
-
     }
 }

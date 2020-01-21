@@ -160,3 +160,8 @@ extension ImageCollectionOutputImp: UICollectionViewDataSourcePrefetching {
     }
 
 }
+extension ImageCollectionOutputImp: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
+       return CGSize(width: 100.0, height: 100.0)
+    }
+}
