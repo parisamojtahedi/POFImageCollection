@@ -58,6 +58,7 @@ class ImageCollectionInteractorImp: ImageCollectionInteractor {
             if let image = CacheManager.imageCache.object(forKey: self.items[index].urlString as NSString) {
                 self.presenter.updateUI(at: indexPath, with: ImageCollectionItemPresenterModel(image: image,
                                                                                                title: self.items[index].title))
+                return
             } else
                 if let data = data, let image = UIImage(data: data) {
                 self.items[index].image = image

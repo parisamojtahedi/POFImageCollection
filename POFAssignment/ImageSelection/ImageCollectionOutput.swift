@@ -19,9 +19,8 @@ class ImageCollectionOutputImp: UIViewController, ImageCollectionOutput {
     private let cellIdentifier: String = "ImageCollectionViewCell"
     private let collectionViewLayout = CustomCollectionViewLayout()
     private var indexesToDelete: [Int] = []
+    
     lazy var imageCollectionView: UICollectionView = {
-        collectionViewLayout.minimumInteritemSpacing = 8
-        collectionViewLayout.scrollDirection = .horizontal
         
         let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.register(ImageCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
@@ -31,13 +30,13 @@ class ImageCollectionOutputImp: UIViewController, ImageCollectionOutput {
         return collectionView
     }()
     
-    lazy var reorderButton: UIButton = {
+    lazy var shuffleButton: UIButton = {
         let btn = UIButton(frame: .zero)
         btn.setTitle("Shuffle", for: .normal)
         btn.setTitleColor(.black, for: .normal)
         btn.backgroundColor = .gray
         btn.titleLabel?.sizeToFit()
-        btn.addTarget(self, action: #selector(triggerRandomAction), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(triggerShuffle), for: .touchUpInside)
         return btn
     }()
     
@@ -60,28 +59,29 @@ class ImageCollectionOutputImp: UIViewController, ImageCollectionOutput {
     
     private func setupSubviews() {
         view.addSubview(imageCollectionView)
-        view.addSubview(reorderButton)
+        view.addSubview(shuffleButton)
         view.addSubview(deleteButton)
         
         imageCollectionView.translatesAutoresizingMaskIntoConstraints = false
         imageCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageCollectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         imageCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        imageCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1).isActive = true
+        imageCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2).isActive = true
         
-        reorderButton.translatesAutoresizingMaskIntoConstraints = false
-        reorderButton.topAnchor.constraint(equalTo: imageCollectionView.bottomAnchor, constant: 8).isActive = true
-        reorderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        reorderButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
-        reorderButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05).isActive = true
+        shuffleButton.translatesAutoresizingMaskIntoConstraints = false
+        shuffleButton.topAnchor.constraint(equalTo: imageCollectionView.bottomAnchor, constant: 16).isActive = true
+        shuffleButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        shuffleButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
+        shuffleButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05).isActive = true
         
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.bottomAnchor.constraint(equalTo: imageCollectionView.topAnchor, constant: -8).isActive = true
+        deleteButton.bottomAnchor.constraint(equalTo: imageCollectionView.topAnchor, constant: -16).isActive = true
         deleteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         deleteButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
         deleteButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05).isActive = true
     }
     
+    //MARK: - update UI
     func display(model: ImageCollectionOutputModel) {
         imageList = model.imageList
         DispatchQueue.main.async { [weak self] in
@@ -94,18 +94,36 @@ class ImageCollectionOutputImp: UIViewController, ImageCollectionOutput {
             guard let `self` = self else { return }
             self.imageList[indexPath.row].image = item.image
             if self.imageCollectionView.indexPathsForVisibleItems.contains(indexPath) {
-                self.imageCollectionView.reloadItems(at: [IndexPath(row: indexPath.row, section: 0)])            }
+                self.imageCollectionView.reloadItems(at: [IndexPath(row: indexPath.row, section: 0)])
+            }
         }
 
     }
     
-    @IBAction func triggerRandomAction() {
-        recursiveShuffle(listToShuffle: &imageList, count: imageList.count)
-        DispatchQueue.main.async { [weak self] in
-            self?.imageCollectionView.reloadData()
+    @IBAction func triggerShuffle() {
+        var result: [OutputModel] = []
+        DispatchQueue.global().async { [weak self] in
+            guard let `self` = self else { return }
+            self.shuffle(start: 0, end: self.imageList.count - 1, result: &result)
+            self.imageList = result
+            DispatchQueue.main.async {
+                self.imageCollectionView.reloadData()
+            }
         }
+        
+    }
+
+    // MARK: - Recursive shuffle
+    private func shuffle(start: Int, end: Int, result: inout [OutputModel]) {
+        if start > end { return }
+        let randomNumber = Int.random(in: start...end)
+        result.append(imageList[randomNumber])
+        shuffle(start: start, end: randomNumber - 1, result: &result)
+        shuffle(start: randomNumber + 1, end: end, result: &result)
+        
     }
     
+    // MARK: - Delete entries
     @IBAction func deleteEntries() {
         indexesToDelete = self.imageList.indices.filter({ self.imageList[$0].title.contains("b") ||  self.imageList[$0].title.contains("d")})
         DispatchQueue.main.async { [weak self] in
@@ -116,16 +134,6 @@ class ImageCollectionOutputImp: UIViewController, ImageCollectionOutput {
                 })
              }, completion: nil)
         }
-    }
-    
-    private func recursiveShuffle(listToShuffle: inout [OutputModel], count: Int) {
-        if count <= 1 { return }
-        let randomNumber = Int.random(in: 0..<imageList.count)
-        let temp = listToShuffle.last!
-        listToShuffle[listToShuffle.count - 1] = listToShuffle[randomNumber]
-        listToShuffle[randomNumber] = temp
-        
-        recursiveShuffle(listToShuffle: &listToShuffle, count: count - 1)
     }
 }
 // MARK: - Datasource
@@ -139,13 +147,13 @@ extension ImageCollectionOutputImp: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         if let image = imageList[indexPath.row].image {
-            cell.imageView.image = image
+            cell.imageView.image = image.rounded.shadowAdded
         } else {
             cell.imageView.image = nil
             self.interactor?.downloadImage(forItemAtIndex: indexPath.row)
         }
         cell.titleLabel.text = imageList[indexPath.row].title
-        cell.setupCellLayer()
+        cell.setup()
         return cell
     }
 }
@@ -159,9 +167,4 @@ extension ImageCollectionOutputImp: UICollectionViewDataSourcePrefetching {
         indexPaths.forEach { self.interactor?.cancelDownloadingImage(forItemAtIndex: $0.row) }
     }
 
-}
-extension ImageCollectionOutputImp: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
-       return CGSize(width: 100.0, height: 100.0)
-    }
 }

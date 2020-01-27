@@ -17,6 +17,7 @@
 		6E3709BE23C815C000C073FF /* ImageCollectionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3709BD23C815C000C073FF /* ImageCollectionPresenter.swift */; };
 		6E3709C023C815D200C073FF /* ImageCollectionOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3709BF23C815D200C073FF /* ImageCollectionOutput.swift */; };
 		6E3709C223C815E200C073FF /* ImageCollectionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3709C123C815E200C073FF /* ImageCollectionUseCase.swift */; };
+		6E5A8BF323DCEEC8005C779E /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5A8BF223DCEEC8005C779E /* UIImage+Extension.swift */; };
 		6E856F9523CE8E6D0009D412 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E856F9423CE8E6D0009D412 /* SceneDelegate.swift */; };
 		6EB405B323CBB31C009BA293 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB405B223CBB31C009BA293 /* ImageCollectionViewCell.swift */; };
 		6EB405B623CBB551009BA293 /* RepositoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EB405B523CBB551009BA293 /* RepositoryManager.swift */; };
@@ -36,6 +37,7 @@
 		6E3709BD23C815C000C073FF /* ImageCollectionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionPresenter.swift; sourceTree = "<group>"; };
 		6E3709BF23C815D200C073FF /* ImageCollectionOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionOutput.swift; sourceTree = "<group>"; };
 		6E3709C123C815E200C073FF /* ImageCollectionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionUseCase.swift; sourceTree = "<group>"; };
+		6E5A8BF223DCEEC8005C779E /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		6E856F9423CE8E6D0009D412 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6EB405B223CBB31C009BA293 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		6EB405B523CBB551009BA293 /* RepositoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryManager.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 		6E3709A523C8133B00C073FF /* POFAssignment */ = {
 			isa = PBXGroup;
 			children = (
+				6E5A8BF123DCEEB1005C779E /* Extensions */,
 				6E345F2B23D3A22B00719F70 /* CacheService */,
 				6E856F9423CE8E6D0009D412 /* SceneDelegate.swift */,
 				6EB405B723CBB5C0009BA293 /* Models */,
@@ -112,6 +115,14 @@
 				6E345F2E23D3BB8200719F70 /* CustomCollectionViewLayout.swift */,
 			);
 			path = UIElements;
+			sourceTree = "<group>";
+		};
+		6E5A8BF123DCEEB1005C779E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6E5A8BF223DCEEC8005C779E /* UIImage+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		6EB405B423CBB50D009BA293 /* Repository */ = {
@@ -201,6 +212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6E5A8BF323DCEEC8005C779E /* UIImage+Extension.swift in Sources */,
 				6E271A2923D74E2300ED8494 /* NetworkURL.swift in Sources */,
 				6E3709C023C815D200C073FF /* ImageCollectionOutput.swift in Sources */,
 				6E3709BE23C815C000C073FF /* ImageCollectionPresenter.swift in Sources */,
@@ -349,6 +361,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5ZK6559PKA;
 				INFOPLIST_FILE = POFAssignment/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -367,6 +380,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5ZK6559PKA;
 				INFOPLIST_FILE = POFAssignment/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

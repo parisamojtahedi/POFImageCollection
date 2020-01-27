@@ -9,9 +9,8 @@
 import UIKit
 
 protocol ImageCollectionPresenterConfig {
-    // To be implemented - opportunity to pass application theme or anything regarding view displaying
+    // opportunity to pass application theme or anything regarding view displaying
 }
-
 
 protocol ImageCollectionPresenter {
     func present(model: ImageCollectionPresenterModel)
@@ -36,6 +35,7 @@ class ImageCollectionPresenterImp: ImageCollectionPresenter {
     func updateUI(at indexPath: IndexPath, with item: ImageCollectionItemPresenterModel) {
         output.updateUI(at: indexPath, with: OutputModel(image: item.image, title: item.title))
     }
+    
     private func convertToOutputModel(model: ImageCollectionItemPresenterModel) -> OutputModel {
         return OutputModel(image: model.image, title: model.title)
     }
